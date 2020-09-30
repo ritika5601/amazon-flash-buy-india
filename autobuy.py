@@ -41,9 +41,31 @@ if __name__ == '__main__':
             except:
                 time.sleep(60)
                 b.refresh()
+		
+	# Purchase Begins
+        b.get('https://www.amazon.in/gp/cart/view.html?ref_=nav_cart')
+        b.find_element_by_name('proceedToCheckout').click()
 
-        
-	
-	
-	
+        # Login Starts
+        try:
+            b.find_element_by_id('ap_email').send_keys(LOGIN_ID)
+            b.find_element_by_id('ap_password').send_keys(LOGIN_PASSWORD)
+            b.find_element_by_id('signInSubmit').click()
+        except:
+            l('LOGIN PASS.')
+            pass
+
+        # Price Check
+        p = b.find_element_by_css_selector('td.grand-total-price').text
+        if int(p.split(' ')[1].replace(',', '')) > LIMIT_VALUE:
+            l('PLICE IS TOO LARGE.')
+            continue
+
+        # Order Confirmation
+        b.find_element_by_name('placeYourOrder1').click()
+        break
+
+    l('ALL DONE.')
+
+
 print (' Made with love by Ritika ')
